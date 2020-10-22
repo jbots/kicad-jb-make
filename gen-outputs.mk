@@ -44,7 +44,7 @@ $(zip_path): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml val_mpn.csv
 	rm $(gerb_dir)/$(project)-Margin.gbr
 
 	@echo "Update BoM with MPNs from list"
-	cd tools/bom-val2mpn && pipenv sync
+	cd tools/bom-val2mpn && pipenv sync 2> /dev/null
 	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
 
 	@mkdir -p $(zip_dir)
