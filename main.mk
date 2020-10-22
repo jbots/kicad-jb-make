@@ -1,7 +1,8 @@
-all: sync output
-
 add-git-tools:
 	git submodule add https://github.com/jbots/kicad-git-lib.git tools/kicad-git-lib
+
+add-build-tools:
+	git submodule add https://github.com/jbots/bom-val2mpn.git tools/bom-val2mpn
 
 add-project-libs:
 	@echo "Adding library submodules to repository"
@@ -22,6 +23,3 @@ sub-lib-update:
 	./tools/kicad-git-lib/sub-lib-manage -c sub-lib-config
 
 new: add-git-tools add-project-libs create-sub-lib-config create-gitignore sub-lib-update
-
-
-.PHONY: all
