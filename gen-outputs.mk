@@ -36,6 +36,7 @@ $(zip_path): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml val_mpn.csv
 	@echo "Creating $(zip_path)"
 	rm -rf $(built_dir)/*
 	kibot -c gen-outputs.yaml -d $(built_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
+	rm -f fp-info-cache?* # Delete extra cache file if it exists
 
 	@echo "Gerbers: Eco layers => silkscreen, Fab and CrtYd => assembly, rm Margin"
 	mv $(gerb_dir)/$(project)-Eco1_User.gbr $(gerb_dir)/$(project)-F_SilkS.gbr
