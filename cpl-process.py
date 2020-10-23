@@ -18,7 +18,6 @@ def process_cpl(in_path, out_path):
 
     # Update column names
     column_translate = [
-        ("Val", "Part"),
         ("Ref", "Reference Designator"),
         ("PosX", "Center X"),
         ("PosY", "Center Y"),
@@ -28,13 +27,13 @@ def process_cpl(in_path, out_path):
         for old, new in column_translate:
             row[new] = row.pop(old)
 
-        # Delete package column
+        # Delete package and Value columns
         row.pop("Package")
+        row.pop("Val")
 
     with open(out_path, mode="w") as f:
         fieldnames = [
             "Reference Designator",
-            "Part",
             "Center X",
             "Center Y",
             "Rotation",
