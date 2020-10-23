@@ -18,6 +18,7 @@ versioned_short_name := $(project)_$(git_name)
 built_dir := output/built
 gerb_dir := $(built_dir)/mfg/gerb
 bom := $(built_dir)/mfg/assembly/$(project)-bom.xlsx
+cpl := $(built_dir)/mfg/assembly/$(project)-both_pos.csv
 zip_dir := output/zip
 versions_dir := output/versions
 zip_path := $(zip_dir)/$(versioned_name).zip
@@ -48,6 +49,7 @@ clean:
 $(zip_path): clean *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 	@echo "Creating $(zip_path)"
 	kibot -c gen-outputs.yaml -d $(built_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
+	$(make_dir)/cpl-process.py $(cpl) $(cpl)
 	rm -f fp-info-cache?* # Delete extra cache file if it exists
 
 	@echo "Gerbers: Eco layers => silkscreen, Fab and CrtYd => assembly, rm Margin"
