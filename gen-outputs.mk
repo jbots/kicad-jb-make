@@ -27,7 +27,7 @@ revision_standin := _BOARD_REVISION_STANDIN_
 .PHONY: bom
 bom: $(bom)
 
-$(bom): $(project).sch $(project).pro
+$(bom): $(project).sch $(project).pro val_mpn.csv
 	kibot -c $(make_dir)/kibot-bom.yaml -d $(built_dir) -e $(project).sch -g output="$(project)-%i%v.%x"
 
 # Create a temp PCB file with revision standin replaced with git name
@@ -42,7 +42,7 @@ clean:
 	rm -rf $(built_dir)/*
 
 # Only build outputs if inputs more recent than zip file
-$(zip_path): clean *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml val_mpn.csv $(bom)
+$(zip_path): clean *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 	@echo "Creating $(zip_path)"
 	kibot -c gen-outputs.yaml -d $(built_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
 	rm -f fp-info-cache?* # Delete extra cache file if it exists
