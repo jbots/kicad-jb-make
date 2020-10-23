@@ -32,9 +32,10 @@ outputs:
           name: MPN
         - Footprint
         - field: datasheet
-          name: datasheet
+          name: Datasheet
       normalize_values: true
       use_alt: true
+      group_fields: ['Part', 'Part Lib', 'Value', 'Footprint', 'Footprint Lib', 'Datasheet', 'MPN']
 
   - name: 'ibom'
     comment: 'Interactive BOM'
