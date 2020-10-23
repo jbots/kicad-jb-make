@@ -1,0 +1,46 @@
+kibot:
+  version: 1
+
+# Disable everything, we just want the BoMs
+preflight:
+  check_zone_fills: false
+  ignore_unconnected: false
+  run_drc: false
+  run_erc: false
+  update_xml: false
+
+outputs:
+
+  - name: 'bom_xlsx'
+    comment: "Spreadsheet for the Bill of Materials"
+    type: bom
+    dir: 'mfg/assembly'
+    options:
+      xlsx:
+        datasheet_as_link: datasheet
+        title: 'BOM'
+        max_col_width: 40
+        highlight_empty: false
+        logo: false
+      columns:
+        - Row
+        - References
+        - Quantity Per PCB
+        - field: Value
+          join: ['voltage', 'current', 'power', 'tolerance']
+        - field: MPN
+          name: MPN
+        - Footprint
+        - field: datasheet
+          name: datasheet
+      normalize_values: true
+      use_alt: true
+
+  - name: 'ibom'
+    comment: 'Interactive BOM'
+    dir: 'docs'
+    type: 'ibom'
+    options:
+      dark_mode: true
+      dnf_filter: _kibom_dnf_Config
+      hide_silkscreen: true
