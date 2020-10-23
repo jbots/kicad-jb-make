@@ -29,6 +29,9 @@ bom: $(bom)
 
 $(bom): $(project).sch $(project).pro val_mpn.csv
 	kibot -c $(make_dir)/kibot-bom.yaml -d $(built_dir) -e $(project).sch -g output="$(project)-%i%v.%x"
+	@echo "Update BoM with MPNs from list"
+	cd tools/bom-val2mpn && pipenv sync 2> /dev/null
+	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
 
 # Create a temp PCB file with revision standin replaced with git name
 .INTERMEDIATE: $(tmp_brd).kicad_pcb $(tmp_brd).pro
@@ -52,10 +55,6 @@ $(zip_path): clean *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom
 	mv $(gerb_dir)/$(project)-Eco2_User.gbr $(gerb_dir)/$(project)-B_SilkS.gbr
 	mv $(gerb_dir)/$(project)-*_CrtYd.gbr $(gerb_dir)/$(project)-*_Fab.gbr $(built_dir)/mfg/assembly/
 	rm $(gerb_dir)/$(project)-Margin.gbr
-
-	@echo "Update BoM with MPNs from list"
-	cd tools/bom-val2mpn && pipenv sync 2> /dev/null
-	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
 
 	@mkdir -p $(zip_dir)
 	cd $(built_dir); zip -r -FS $(shell realpath --relative-to=$(built_dir) $(zip_path)) *
