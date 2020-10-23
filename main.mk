@@ -3,6 +3,7 @@ add-git-tools:
 
 add-build-tools:
 	git submodule add https://github.com/jbots/bom-val2mpn.git tools/bom-val2mpn
+	git submodule add https://github.com/INTI-CMNB/KiBot.git tools/KiBot
 
 add-project-libs:
 	@echo "Adding library submodules to repository"
@@ -23,3 +24,5 @@ sub-lib-update:
 	./tools/kicad-git-lib/sub-lib-manage -c sub-lib-config
 
 new: add-git-tools add-project-libs create-sub-lib-config create-gitignore sub-lib-update
+
+.PHONY: add-git-tools add-build-tools add-project-ilbs sync create-sub-lib-config create-gitignore sub-lib-update new

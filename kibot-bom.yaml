@@ -14,7 +14,7 @@ outputs:
   - name: 'bom_xlsx'
     comment: "Spreadsheet for the Bill of Materials"
     type: bom
-    dir: 'mfg/assembly'
+    dir: '.'
     options:
       xlsx:
         datasheet_as_link: datasheet
@@ -36,12 +36,3 @@ outputs:
       normalize_values: true
       use_alt: true
       group_fields: ['Part', 'Part Lib', 'Value', 'Footprint', 'Footprint Lib', 'Datasheet', 'MPN']
-
-  - name: 'ibom'
-    comment: 'Interactive BOM'
-    dir: 'docs'
-    type: 'ibom'
-    options:
-      dark_mode: true
-      dnf_filter: _kibom_dnf_Config
-      hide_silkscreen: true
