@@ -35,7 +35,7 @@ zip_path := $(zip_dir)/$(versioned_name).zip
 $(bom): $(project).sch $(project).pro val_mpn.csv
 	$(kibot) -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
 	@echo "Update BoM with MPNs from list"
-	cd tools/bom-val2mpn && pipenv sync 2> /dev/null
+	cd tools/bom-val2mpn && PIPENV_COLORBLIND=1 pipenv sync 2> /dev/null
 	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
 
 # Create a temp PCB file with revision standin replaced with git name
