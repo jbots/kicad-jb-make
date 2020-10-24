@@ -10,21 +10,27 @@ git_name := UNVERSIONED
 git_date := $(shell date +"%Y%m%d%H%M")
 endif
 
+# Strings
 bold := $(shell tput bold)
 normal := $(shell tput sgr0)
-
-kibot := pipenv run tools/KiBot/src/kibot
+revision_standin := _BOARD_REVISION_STANDIN_
 versioned_name := $(project)_$(git_date)_$(git_name)
 versioned_short_name := $(project)_$(git_name)
+
+# Tools
+kibot := pipenv run tools/KiBot/src/kibot
+
+# Directories
 build_dir := output/built
 gerb_dir := $(build_dir)/mfg/gerb
-bom := output/$(project)-bom.xlsx
-cpl := $(build_dir)/mfg/assembly/$(project)-both_pos.csv
 zip_dir := output/zip
 versions_dir := output/versions
-zip_path := $(zip_dir)/$(versioned_name).zip
+
+# Files
+bom := output/$(project)-bom.xlsx
+cpl := $(build_dir)/mfg/assembly/$(project)-both_pos.csv
 tmp_brd := .temp_pcb_processed_
-revision_standin := _BOARD_REVISION_STANDIN_
+zip_path := $(zip_dir)/$(versioned_name).zip
 
 $(bom): $(project).sch $(project).pro val_mpn.csv
 	$(kibot) -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
