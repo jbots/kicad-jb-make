@@ -10,7 +10,7 @@ add-project-libs:
 	$(subst lib:,./tools/kicad-git-lib/add-submodule,$(libs))
 
 sync:
-	git submodule update --init --recursive
+	git submodule update --recursive
 
 create-sub-lib-config:
 	@echo "Creating sub-lib-config file"
