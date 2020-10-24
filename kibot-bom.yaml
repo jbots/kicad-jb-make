@@ -3,6 +3,7 @@ kibot:
 
 global:
   filters:
+    # Malformed value warnings come about because BoM tool doesn't recognise V units etc
     - number: 20
       regex: 'Malformed value:.*'
 
