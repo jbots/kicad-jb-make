@@ -43,7 +43,8 @@ $(bom): $(project).sch $(project).pro val_mpn.csv
 $(tmp_brd).kicad_pcb: $(tmp_brd).pro
 	@echo "Creating temporary pcb file at $(tmp_brd).kicad_pcb"
 	sed 's/$(revision_standin)/$(git_name)/g' $(project).kicad_pcb > $(tmp_brd).kicad_pcb
-$(tmp_brd).pro: # .pro file is created during DRC, just tracked here as intermediate
+$(tmp_brd).pro:
+	cp $(project).pro $(tmp_brd).pro
 
 # Only build outputs if inputs more recent than zip file
 $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
