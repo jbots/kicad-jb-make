@@ -13,6 +13,7 @@ endif
 bold := $(shell tput bold)
 normal := $(shell tput sgr0)
 
+kibot := pipenv run tools/KiBot/src/kibot
 versioned_name := $(project)_$(git_date)_$(git_name)
 versioned_short_name := $(project)_$(git_name)
 build_dir := output/built
@@ -26,7 +27,7 @@ tmp_brd := .temp_pcb_processed_
 revision_standin := _BOARD_REVISION_STANDIN_
 
 $(bom): $(project).sch $(project).pro val_mpn.csv
-	kibot -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
+	$(kibot) -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
 	@echo "Update BoM with MPNs from list"
 	cd tools/bom-val2mpn && pipenv sync 2> /dev/null
 	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
@@ -43,7 +44,7 @@ $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 
 	rm -rf $(build_dir)/*
 	pipenv --site-packages sync
-	pipenv run tools/KiBot/src/kibot -c gen-outputs.yaml -d $(build_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
+	$(kibot) -c gen-outputs.yaml -d $(build_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
 	$(make_dir)/cpl-process.py $(cpl) $(cpl)
 	rm -f fp-info-cache?* # Delete extra cache file if it exists
 

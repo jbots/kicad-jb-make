@@ -1,7 +1,12 @@
 kibot:
   version: 1
 
-# Disable everything, we just want the BoMs
+global:
+  filters:
+    - number: 20
+      regex: 'Malformed value:.*'
+
+# Disable everything, we just want the BoM
 preflight:
   check_zone_fills: false
   ignore_unconnected: false
