@@ -14,22 +14,7 @@ def process_cpl(in_path, out_path):
     # Fix rotation for bottom sides (make negative)
     for row in data:
         if row["Side"] == "bottom":
-            row["Rot"] = "-" + str(row["Rot"])
-
-    # Update column names
-    column_translate = [
-        ("Ref", "Reference Designator"),
-        ("PosX", "Center X"),
-        ("PosY", "Center Y"),
-        ("Rot", "Rotation"),
-    ]
-    for row in data:
-        for old, new in column_translate:
-            row[new] = row.pop(old)
-
-        # Delete package and Value columns
-        row.pop("Package")
-        row.pop("Val")
+            row["Rotation"] = "-" + str(row["Rotation"])
 
     with open(out_path, mode="w") as f:
         fieldnames = [
