@@ -1,3 +1,6 @@
 [submodule "KiBot"]
-	path = KiBot
+	path = tools/KiBot
 	url = https://github.com/INTI-CMNB/KiBot.git
+[submodule "tools/bom-val2mpn"]
+	path = tools/bom-val2mpn
+	url = https://github.com/jbots/bom-val2mpn.git
