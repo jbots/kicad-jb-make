@@ -46,7 +46,7 @@ $(tmp_brd).kicad_pcb: $(tmp_brd).pro
 $(tmp_brd).pro:
 	cp $(project).pro $(tmp_brd).pro
 
-# Only build outputs if inputs more recent than zip file
+# Prepare files in build directory
 $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 
 	rm -rf $(build_dir)/*
@@ -66,6 +66,7 @@ $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 	@# Ensure that output dir (target) has the latest timestamp so doesn't rebuild unnecessarily
 	@touch $(build_dir)
 
+# Zip up files from build directory
 $(zip_path): $(build_dir)
 	@echo "Creating $(zip_path)"
 	@mkdir -p $(zip_dir)
