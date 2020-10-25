@@ -19,6 +19,8 @@ versioned_short_name := $(project)_$(git_name)
 
 # Tools
 kibot := pipenv run tools/KiBot/src/kibot
+val2mpn := cd tools/bom-val2mpn && PIPENV_COLORBLIND=1 CI=1 pipenv sync 1> /dev/null && cd - &&\
+	pipenv-shebang tools/bom-val2mpn/process-bom.py
 
 # Directories
 build_dir := output/built
@@ -35,8 +37,7 @@ zip_path := $(zip_dir)/$(versioned_name).zip
 $(bom): $(project).sch $(project).pro val_mpn.csv
 	$(kibot) -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
 	@echo "Update BoM with MPNs from list"
-	cd tools/bom-val2mpn && PIPENV_COLORBLIND=1 pipenv sync 2> /dev/null
-	pipenv-shebang tools/bom-val2mpn/process-bom.py $(bom) $(bom) val_mpn.csv
+	$(val2mpn) $(bom) $(bom) val_mpn.csv
 
 # Create a temp PCB file with revision standin replaced with git name
 .INTERMEDIATE: $(tmp_brd).kicad_pcb $(tmp_brd).pro
