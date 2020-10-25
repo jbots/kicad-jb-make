@@ -18,7 +18,7 @@ versioned_name := $(project)_$(git_date)_$(git_name)
 versioned_short_name := $(project)_$(git_name)
 
 # Tools
-kibot := pipenv run tools/KiBot/src/kibot
+kibot := pipenv run $(make_dir)/KiBot/src/kibot
 val2mpn := cd tools/bom-val2mpn && PIPENV_COLORBLIND=1 CI=1 pipenv sync 1> /dev/null && cd - &&\
 	pipenv-shebang tools/bom-val2mpn/process-bom.py
 
