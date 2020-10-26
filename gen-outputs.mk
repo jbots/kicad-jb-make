@@ -52,7 +52,7 @@ $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 
 	rm -rf $(build_dir)/*
 	$(kibot) -c gen-outputs.yaml -d $(build_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
-	$(make_dir)/cpl-process.py $(cpl) $(cpl)
+	$(make_dir)/tools/cpl-process.py $(cpl) $(cpl)
 	rm -f fp-info-cache?* # Delete extra cache file if it exists
 
 	@echo "Gerbers: Eco layers => silkscreen, Fab and CrtYd => assembly, rm Margin"
