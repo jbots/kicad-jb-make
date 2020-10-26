@@ -76,7 +76,7 @@ $(build_successful): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(b
 	@touch $(build_successful)
 
 # Zip up files from build directory
-$(zip_path): $(build_dir)
+$(zip_path): $(build_successful)
 	@echo "Creating $(zip_path)"
 	@mkdir -p $(zip_dir)
 	cd $(build_dir); zip -r -FS $(shell realpath --relative-to=$(build_dir) $(zip_path)) *
