@@ -30,6 +30,7 @@ versions_dir := output/versions
 
 # Files
 bom := output/$(project)-bom.xlsx
+build_successful := output/.build_successful
 cpl := output/$(project)-both_pos.csv
 tmp_brd := .temp_pcb_processed_
 zip_path := $(zip_dir)/$(versioned_name).zip
@@ -52,9 +53,10 @@ $(tmp_brd).pro:
 	cp $(project).pro $(tmp_brd).pro
 
 # Prepare files in build directory
-$(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom) $(cpl)
+$(build_successful): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom) $(cpl)
 
-	rm -rf $(build_dir)/*
+	@rm -f $(build_successful)
+	@rm -rf $(build_dir)/*
 	$(kibot) -c gen-outputs.yaml -d $(build_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
 	@rm -f fp-info-cache?* # Delete extra cache file if it exists
 
@@ -70,8 +72,8 @@ $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom) $(c
 	cp $(bom) $(build_dir)/mfg/assembly/
 	cp $(cpl) $(build_dir)/mfg/assembly/$(project)-pos.csv
 
-	@# Ensure that output dir (target) has the latest timestamp so doesn't rebuild unnecessarily
-	@touch $(build_dir)
+	@# Indicate build is successful with timestamp TODO replace with build report
+	@touch $(build_successful)
 
 # Zip up files from build directory
 $(zip_path): $(build_dir)
@@ -88,7 +90,7 @@ $(versions_dir)/%: $(zip_dir)/%.zip
 	unzip $< -d $@
 
 bom: $(bom)
-build: $(build_dir)
+build: $(build_successful)
 zip: $(zip_path)
 
 .PHONY: bom build zip
