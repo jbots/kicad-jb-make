@@ -23,7 +23,7 @@ val2mpn := cd $(make_dir)/tools/bom-val2mpn && PIPENV_COLORBLIND=1 CI=1 pipenv s
 	pipenv-shebang $(make_dir)/tools/bom-val2mpn/process-bom.py
 
 # Directories
-build_dir := output/built
+build_dir := output/build
 gerb_dir := $(build_dir)/mfg/gerb
 zip_dir := output/zip
 versions_dir := output/versions
