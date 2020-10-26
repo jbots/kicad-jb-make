@@ -1,0 +1,44 @@
+kibot:
+  version: 1
+
+# Disable everything, we just want positions of components
+preflight:
+  check_zone_fills: false
+  ignore_unconnected: false
+  run_drc: false
+  run_erc: false
+  update_xml: false
+
+outputs:
+  # This output is what you get from the 'File/Fabrication output/Footprint poistion (.pos) file' menu in pcbnew.
+  - name: 'pick_and_place'
+    comment: 'Generate pick and place files.'
+    type: 'position'
+    dir: '.'
+    options:
+      # [string|list(string)=''] Name of the filter to mark components as not fitted.
+      # A short-cut to use for simple cases where a variant is an overkill
+      dnf_filter: _kibom_dnf_Config
+      # [string='ASCII'] [ASCII,CSV] format for the position file
+      format: 'CSV'
+      # [boolean=true] only include the surface mount components
+      only_smd: false
+      # [string='%f-%i%v.%x'] output file name (%i='top_pos'|'bottom_pos'|'both_pos', %x='pos'|'csv'). Affected by global options
+      #output: '%f-%i%v.%x'
+      # [boolean=true] generate two separated files, one for the top and another for the bottom
+      separate_files_for_front_and_back: false
+      # [string='millimeters'] [millimeters,inches] units used for the positions
+      units: 'millimeters'
+      # [string=''] Board variant to apply
+      variant: ''
+      columns:
+        - id: Ref
+          name: "Reference Designator"
+        - id: PosX
+          name: "Center X"
+        - id: PosY
+          name: "Center Y"
+        - id: Rot
+          name: "Rotation"
+        - id: Side
+          name: Side

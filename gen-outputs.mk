@@ -30,7 +30,7 @@ versions_dir := output/versions
 
 # Files
 bom := output/$(project)-bom.xlsx
-cpl := $(build_dir)/mfg/assembly/$(project)-both_pos.csv
+cpl := output/$(project)-both_pos.csv
 tmp_brd := .temp_pcb_processed_
 zip_path := $(zip_dir)/$(versioned_name).zip
 
@@ -38,6 +38,10 @@ $(bom): $(project).sch $(project).pro val_mpn.csv
 	$(kibot) -c $(make_dir)/kibot-bom.yaml -d output -e $(project).sch -g output="$(project)-%i%v.%x"
 	@echo "Update BoM with MPNs from list"
 	$(val2mpn) $(bom) $(bom) val_mpn.csv
+
+$(cpl): $(tmp_brd).kicad_pcb
+	$(kibot) -c $(make_dir)/kibot-position.yaml -d output -b $(tmp_brd).kicad_pcb -e $(project).sch -g output="$(project)-%i%v.%x"
+	$(make_dir)/tools/cpl-process.py $(cpl) $(cpl)
 
 # Create a temp PCB file with revision standin replaced with git name
 .INTERMEDIATE: $(tmp_brd).kicad_pcb $(tmp_brd).pro
@@ -48,12 +52,13 @@ $(tmp_brd).pro:
 	cp $(project).pro $(tmp_brd).pro
 
 # Prepare files in build directory
-$(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
+$(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom) $(cpl)
 
 	rm -rf $(build_dir)/*
 	$(kibot) -c gen-outputs.yaml -d $(build_dir) -e $(project).sch -b $(tmp_brd).kicad_pcb -g output="$(project)-%i%v.%x"
-	$(make_dir)/tools/cpl-process.py $(cpl) $(cpl)
-	rm -f fp-info-cache?* # Delete extra cache file if it exists
+	@rm -f fp-info-cache?* # Delete extra cache file if it exists
+
+	@mkdir -p $(build_dir)/mfg/assembly
 
 	@echo "Gerbers: Eco layers => silkscreen, Fab and CrtYd => assembly, rm Margin"
 	mv $(gerb_dir)/$(project)-Eco1_User.gbr $(gerb_dir)/$(project)-F_SilkS.gbr
@@ -61,8 +66,9 @@ $(build_dir): *.sch *.kicad_pcb $(tmp_brd).kicad_pcb gen-outputs.yaml $(bom)
 	mv $(gerb_dir)/$(project)-*_CrtYd.gbr $(gerb_dir)/$(project)-*_Fab.gbr $(build_dir)/mfg/assembly/
 	rm $(gerb_dir)/$(project)-Margin.gbr
 
-	@echo "Copy BoM into assembly dir"
+	@echo "Copy BoM and CPL into assembly dir"
 	cp $(bom) $(build_dir)/mfg/assembly/
+	cp $(cpl) $(build_dir)/mfg/assembly/$(project)-pos.csv
 
 	@# Ensure that output dir (target) has the latest timestamp so doesn't rebuild unnecessarily
 	@touch $(build_dir)
