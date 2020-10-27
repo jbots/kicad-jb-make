@@ -40,7 +40,7 @@ $(bom): $(project).sch $(project).pro val_mpn.csv
 	@echo "Update BoM with MPNs from list"
 	$(val2mpn) $(bom) $(bom) val_mpn.csv
 
-$(cpl): $(tmp_brd).kicad_pcb
+$(cpl): *.kicad_pcb $(tmp_brd).kicad_pcb
 	$(kibot) -c $(make_dir)/kibot-position.yaml -d output -b $(tmp_brd).kicad_pcb -e $(project).sch -g output="$(project)-%i%v.%x"
 	$(make_dir)/tools/cpl-process.py $(cpl) $(cpl)
 
